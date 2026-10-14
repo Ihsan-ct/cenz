@@ -30,7 +30,7 @@ export default async function Dashboard({ params: { locale } }: { params: { loca
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
       <h1 className="text-3xl font-bold">
-        {isID ? 'Selamat datang' : 'Welcome'}, {user?.username || session?.user.name}
+        {isID ? 'Selamat datang' : 'Welcome'}, {user?.username || session?.user?.name}
       </h1>
       <div className="mt-8 grid gap-6 sm:grid-cols-3">
         <div className="rounded-xl border border-neutral-800 bg-neutral-950 p-6">
