@@ -8,8 +8,7 @@
     "start": "next start",
     "worker": "tsx worker/index.ts",
     "db:push": "prisma db push",
-    "db:generate": "prisma generate",
-    "postinstall": "prisma generate"
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.678.0",
