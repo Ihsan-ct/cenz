@@ -14,7 +14,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         error.name,
         error.message,
         "input=",
-        JSON.stringify((error as any).input ?? (error as any).cause?.input ?? null)
+        JSON.stringify((error as any).input ?? (error as any).cause?.input ?? null),
+        "\nstack=", error.stack
       );
     },
     warn(code) {
@@ -25,7 +26,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Discord({
       clientId: process.env.DISCORD_CLIENT_ID!.trim(),
       clientSecret: process.env.DISCORD_CLIENT_SECRET!.trim(),
-      authorization: { params: { scope: "identify email" } },
     }),
   ],
   callbacks: {
