@@ -63,11 +63,11 @@ async function processJob(jobId) {
     if (!input) throw new UserError("Audio tidak terunduh. Durasi mungkin melebihi batas atau sumber tidak tersedia.");
 
     // 2. Konversi: speed (atempo) dan amplify (dB)
-    const speed = Math.min(2, Math.max(0.5, Number(job.speed) || 1));
-    const amp = Math.min(15, Math.max(0, Number(job.amplify) || 0));
+    const speed = Math.min(3, Math.max(0.5, Number(job.speed) || 1));
+    const amp = Math.min(10, Math.max(-10, Number(job.amplify) || 0));
     const filters = [];
     if (speed !== 1) filters.push(`atempo=${speed.toFixed(3)}`);
-    if (amp > 0) filters.push(`volume=${amp.toFixed(1)}dB`);
+    if (amp !== 0) filters.push(`volume=${amp.toFixed(1)}dB`);
 
     const out = path.join(dir, "out.mp3");
     await run("ffmpeg", [
