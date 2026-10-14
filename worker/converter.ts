@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
 import { prisma } from '../lib/db';
-import { uploadFile } from '../lib/r2';
+import { supabaseAdmin, BUCKET, objectKey } from '../lib/storage';
 import { uploadAudioToRoblox } from '../lib/roblox';
 import { decrypt } from '../lib/crypto';
 
@@ -61,9 +61,12 @@ export async function processConvert(data: JobData) {
     await run('ffmpeg', ['-y', ...args]);
 
     const audioBuf = await fs.readFile(outPath);
-    const r2Key = `jobs/${data.jobId}/out.mp3`;
-    await uploadFile(r2Key, audioBuf, 'audio/mpeg');
-    await prisma.job.update({ where: { id: data.jobId }, data: { r2Key } });
+    const objKey = objectKey(data.userId, data.jobId);
+    await supabaseAdmin.storage.from(BUCKET).upload(objKey, audioBuf, {
+      contentType: 'audio/mpeg',
+      upsert: true,
+    });
+    await prisma.job.update({ where: { id: data.jobId }, data: { r2Key: objKey } });
 
     // upload to Roblox
     const robloxAcc = await prisma.robloxAccount.findUnique({ where: { userId: data.userId } });
