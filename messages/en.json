@@ -1,0 +1,10 @@
+{
+  "nav": {"home":"Home","dashboard":"Dashboard","convert":"Convert Audio","history":"History","roblox":"Roblox Account","subscription":"Plans","login":"Sign in with Discord","logout":"Logout"},
+  "home": {"hero_title":"Convert & Upload Audio to Roblox","hero_subtitle":"Convert audio from YouTube or SoundCloud with custom speed and amplification, upload directly to your Roblox account.","get_started":"Get Started","join_discord":"Join Discord","features_title":"Features"},
+  "pricing": {"title":"Choose a Plan","subtitle":"Start converting and uploading audio to Roblox.","weekly":"7 Days","monthly":"30 Days","subscribe":"Buy Now","popular":"Popular"},
+  "convert": {"title":"Convert Audio","url_placeholder":"Paste YouTube or SoundCloud link...","speed":"Speed","amplify":"Amplify (dB)","max_duration":"Max Duration (sec)","submit":"Convert Audio","processing":"Processing...","requires_subscription":"You need an active subscription","requires_roblox":"Link your Roblox account first"},
+  "history": {"title":"Conversion History","status":"Status","date":"Date","asset_id":"Asset ID","no_history":"No history yet","download":"Download","upload_to_roblox":"Upload to Roblox","retry_upload":"Retry Upload","delete":"Delete"},
+  "roblox": {"title":"Roblox Account","user_id_label":"Roblox User ID","api_key_label":"API Key","link_button":"Save","unlink_button":"Unlink","linked_as":"Linked as","key_warning":"Your API key is encrypted with AES-256-GCM.","invalid_key":"Invalid API key","link_success":"Successfully linked!"},
+  "status": {"QUEUED":"Queued","DOWNLOADING":"Downloading","PROCESSING":"Processing","UPLOADING":"Uploading","UPLOADED":"Uploaded","COMPLETED":"Completed","FAILED":"Failed","PENDING":"Pending Moderation","ACCEPTED":"Accepted","REJECTED":"Rejected"},
+  "common": {"loading":"Loading...","error":"Something went wrong","save":"Save","cancel":"Cancel"}
+}

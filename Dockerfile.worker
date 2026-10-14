@@ -1,0 +1,11 @@
+FROM node:20-alpine
+RUN apk add --no-cache ffmpeg python3 py3-pip curl ca-certificates \
+ && pip install --break-system-packages -U yt-dlp
+WORKDIR /app
+COPY package.json pnpm-lock.yaml* ./
+RUN corepack enable && (pnpm install --frozen-lockfile || pnpm install)
+COPY prisma ./prisma
+RUN pnpm prisma generate
+COPY worker ./worker
+COPY lib ./lib
+CMD ["pnpm", "worker"]

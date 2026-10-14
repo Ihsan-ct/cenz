@@ -1,0 +1,10 @@
+{
+  "nav": {"home":"Beranda","dashboard":"Dashboard","convert":"Konversi Audio","history":"Riwayat","roblox":"Akun Roblox","subscription":"Paket","login":"Masuk dengan Discord","logout":"Keluar"},
+  "home": {"hero_title":"Konversi & Upload Audio ke Roblox","hero_subtitle":"Konversi audio dari YouTube atau SoundCloud dengan kecepatan dan amplifikasi kustom, langsung upload ke akun Roblox kamu.","get_started":"Mulai Sekarang","join_discord":"Gabung Discord","features_title":"Fitur Utama"},
+  "pricing": {"title":"Pilih Paket","subtitle":"Mulai konversi dan upload audio ke Roblox.","weekly":"7 Hari","monthly":"30 Hari","subscribe":"Beli Sekarang","popular":"Populer"},
+  "convert": {"title":"Konversi Audio","url_placeholder":"Tempel link YouTube atau SoundCloud...","speed":"Kecepatan","amplify":"Amplifikasi (dB)","max_duration":"Durasi Maks (detik)","submit":"Konversi Audio","processing":"Sedang memproses...","requires_subscription":"Anda perlu membeli akses terlebih dahulu","requires_roblox":"Hubungkan akun Roblox terlebih dahulu"},
+  "history": {"title":"Riwayat Konversi","status":"Status","date":"Tanggal","asset_id":"Asset ID","no_history":"Belum ada riwayat","download":"Unduh","upload_to_roblox":"Upload ke Roblox","retry_upload":"Coba Lagi","delete":"Hapus"},
+  "roblox": {"title":"Akun Roblox","user_id_label":"Roblox User ID","api_key_label":"API Key","link_button":"Simpan","unlink_button":"Putuskan Koneksi","linked_as":"Terhubung sebagai","key_warning":"API Key kamu dienkripsi dengan AES-256-GCM.","invalid_key":"API Key tidak valid","link_success":"Berhasil dihubungkan!"},
+  "status": {"QUEUED":"Menunggu","DOWNLOADING":"Mengunduh","PROCESSING":"Memproses","UPLOADING":"Mengunggah","UPLOADED":"Terunggah","COMPLETED":"Selesai","FAILED":"Gagal","PENDING":"Menunggu Moderasi","ACCEPTED":"Diterima","REJECTED":"Ditolak"},
+  "common": {"loading":"Memuat...","error":"Terjadi kesalahan","save":"Simpan","cancel":"Batal"}
+}

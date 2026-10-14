@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  discordId     String    @unique
+  username      String
+  discriminator String?
+  email         String?
+  avatar        String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  robloxAccount RobloxAccount?
+  jobs          Job[]
+  subscription  Subscription?
+  payments      Payment[]
+
+  @@index([discordId])
+}
+
+model RobloxAccount {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  robloxUserId   String
+  robloxUsername String?
+  apiKeyEnc      String
+  apiKeyIv       String
+  apiKeyTag      String
+  verified       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Job {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceUrl    String?
+  sourceType   String
+  fileName     String?
+  speed        Float     @default(1.0)
+  amplify      Float     @default(0)
+  maxDuration  Int       @default(600)
+  status       String    @default("QUEUED")
+  moderation   String?
+  assetId      String?
+  r2Key        String?
+  errorMessage String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  completedAt  DateTime?
+
+  @@index([userId, createdAt])
+  @@index([status])
+}
+
+model Subscription {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan      String
+  active    Boolean   @default(true)
+  startedAt DateTime  @default(now())
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Payment {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider    String
+  reference   String    @unique
+  merchantRef String
+  amount      Int
+  status      String    @default("PENDING")
+  plan        String
+  paidAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  userId    String
+  window    String
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, window])
+}
