@@ -1,0 +1,35 @@
+name: Worker Auto
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  worker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg python3-pip
+          pip install --break-system-packages -U yt-dlp
+      - run: |
+          corepack enable
+          pnpm install --frozen-lockfile || pnpm install
+          pnpm prisma generate
+      - name: run worker
+        timeout-minutes: 4
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_BUCKET: audio
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
+        run: timeout 210 pnpm worker || true
