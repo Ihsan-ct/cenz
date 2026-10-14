@@ -9,7 +9,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.AUTH_DEBUG === "1",
   logger: {
     error(error) {
-      console.error("[auth][error]", error.name, error.message, error.cause ?? "");
+      console.error(
+        "[auth][error]",
+        error.name,
+        error.message,
+        "input=",
+        JSON.stringify((error as any).input ?? (error as any).cause?.input ?? null)
+      );
     },
     warn(code) {
       console.warn("[auth][warn]", code);
@@ -23,18 +29,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account?.provider !== "discord" || !profile?.id) return false;
+    async signIn({ account, profile }) {
+      const p = profile as any;
+      if (account?.provider !== "discord" || !p?.id) return false;
       try {
+        const data = {
+          username: String(p.global_name ?? p.username ?? "user"),
+          discriminator: p.discriminator && p.discriminator !== "0" ? String(p.discriminator) : null,
+          email: p.email ? String(p.email) : null,
+          avatar: p.avatar ? String(p.avatar) : null,
+        };
         await prisma.user.upsert({
-          where: { discordId: String(profile.id) },
-          update: { name: user.name, image: user.image, email: user.email },
-          create: {
-            discordId: String(profile.id),
-            name: user.name,
-            image: user.image,
-            email: user.email,
-          },
+          where: { discordId: String(p.id) },
+          update: data,
+          create: { discordId: String(p.id), ...data },
         });
         return true;
       } catch (e) {
@@ -43,9 +51,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     },
     async jwt({ token, account, profile }) {
-      if (account?.provider === "discord" && profile?.id) {
+      const p = profile as any;
+      if (account?.provider === "discord" && p?.id) {
         const u = await prisma.user.findUnique({
-          where: { discordId: String(profile.id) },
+          where: { discordId: String(p.id) },
           select: { id: true },
         });
         if (u) token.uid = u.id;
