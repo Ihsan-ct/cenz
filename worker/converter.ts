@@ -28,7 +28,7 @@ function run(cmd: string, args: string[], cwd?: string): Promise<string> {
 }
 
 export async function processConvert(data: JobData) {
-  const tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'cenz-'));
+  const tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'nakatune-'));
   const rawPath = path.join(tmp, 'raw');
   const outPath = path.join(tmp, 'out.mp3');
 

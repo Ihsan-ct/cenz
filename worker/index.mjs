@@ -43,7 +43,7 @@ async function processJob(jobId) {
   if (!job || job.status !== "QUEUED") return;
   await prisma.job.update({ where: { id: jobId }, data: { status: "PROCESSING" } });
 
-  const dir = await mkdtemp(path.join(tmpdir(), "cenz-"));
+  const dir = await mkdtemp(path.join(tmpdir(), "nakatune-"));
   try {
     if (!job.sourceUrl) throw new UserError("Sumber audio tidak ada.");
     const extra = (process.env.YTDLP_EXTRA_ARGS ?? "").split(" ").filter(Boolean);

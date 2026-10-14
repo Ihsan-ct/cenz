@@ -9,7 +9,7 @@ export default async function Header({ locale = 'id' }: { locale?: string }) {
     <header className="sticky top-0 z-50 w-full border-b border-cyan-500/10 bg-black/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link href={`/${locale}`} className="flex items-center gap-3">
-          <span className="text-base font-bold uppercase tracking-wider neon-text">CENZ</span>
+          <span className="text-base font-bold uppercase tracking-wider neon-text">NakaTune</span>
         </Link>
         <nav className="flex items-center gap-6 text-sm">
           {session?.user ? (

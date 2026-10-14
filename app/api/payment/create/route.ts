@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   const plan = (form?.get('plan') as PlanKey) || 'weekly';
   if (!PLANS[plan]) return NextResponse.json({ error: 'INVALID_PLAN' }, { status: 400 });
 
-  const merchantRef = `CENZ-${user.id.slice(0, 8)}-${Date.now()}`;
+  const merchantRef = `NakaTune-${user.id.slice(0, 8)}-${Date.now()}`;
   const tripay = await createTripayTransaction({
     merchantRef,
     amount: PLANS[plan].price,

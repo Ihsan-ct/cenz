@@ -19,5 +19,5 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   if (!job) return Response.json({ error: "not_found" }, { status: 404 });
 
   // r2Key dipakai sebagai key untuk /api/storage/download?key=...
-  return Response.json({ ...job, downloadKey: job.status === "READY" ? job.r2Key : null });
+  return Response.json({ ...job, downloadKey: job.status === "COMPLETED" || job.status === "UPLOADED" ? job.r2Key : null });
 }

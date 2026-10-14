@@ -18,7 +18,7 @@ export async function uploadAudioToRoblox(
   form.append('file', new Blob([ab], { type: 'audio/mpeg' }), fileName);
   form.append('assetType', 'Audio');
   form.append('displayName', fileName.replace(/\.mp3$/i, ''));
-  form.append('description', 'Uploaded via cenz-clone');
+  form.append('description', 'Uploaded via nakatune-clone');
 
   const res = await fetch('https://apis.roblox.com/assets/v1/assets', {
     method: 'POST',

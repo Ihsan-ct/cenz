@@ -1,5 +1,5 @@
 {
-  "name": "cenz-worker",
+  "name": "nakatune-worker",
   "private": true,
   "type": "module",
   "dependencies": {
