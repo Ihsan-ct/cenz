@@ -5,20 +5,123 @@
 :root {
   --background: 0 0% 3.9%;
   --foreground: 0 0% 98%;
+  --neon-cyan: #22d3ee;
+  --neon-magenta: #e879f9;
 }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+
 body {
-  background: #0a0a0a;
+  background: #050507;
   color: #fafafa;
   font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-.neon-text {
-  background: linear-gradient(90deg, #22d3ee, #e879f9);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ── animated gradient bg ── */
+.gradient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 50% at 20% 10%, rgba(34, 211, 238, 0.15), transparent 60%),
+    radial-gradient(50% 40% at 80% 20%, rgba(232, 121, 249, 0.12), transparent 60%),
+    radial-gradient(40% 50% at 50% 90%, rgba(34, 211, 238, 0.08), transparent 70%);
+  animation: float 20s ease-in-out infinite;
 }
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-2%, -1%) scale(1.05); }
+}
+
+/* ── grid overlay ── */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  pointer-events: none;
+}
+
+/* ── neon text ── */
+.neon-text {
+  background: linear-gradient(120deg, #22d3ee 0%, #e879f9 50%, #22d3ee 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── glow card ── */
+.glow-card {
+  position: relative;
+  background: rgba(15, 15, 20, 0.6);
+  border: 1px solid rgba(34, 211, 238, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.glow-card:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ── pulse ring (CTA) ── */
+.pulse-ring {
+  position: relative;
+}
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  background: linear-gradient(120deg, #22d3ee, #e879f9);
+  opacity: 0.5;
+  filter: blur(10px);
+  z-index: -1;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+/* ── fade-in ── */
+.fade-in {
+  animation: fadeIn 0.8s ease-out backwards;
+}
+.fade-in-delay-1 { animation-delay: 0.1s; }
+.fade-in-delay-2 { animation-delay: 0.2s; }
+.fade-in-delay-3 { animation-delay: 0.3s; }
+.fade-in-delay-4 { animation-delay: 0.4s; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── scrollbar ── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #050507; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(120deg, #22d3ee, #e879f9);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: #22d3ee; }
