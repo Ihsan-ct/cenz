@@ -131,3 +131,16 @@ model Notification {
   @@index([userId, read])
   @@index([userId, createdAt])
 }
+
+model Coupon {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  discountPct Int
+  maxUses     Int      @default(100)
+  usedCount   Int      @default(0)
+  expiresAt   DateTime?
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@index([code])
+}
