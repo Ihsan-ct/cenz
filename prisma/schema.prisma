@@ -20,6 +20,8 @@ model User {
   jobs          Job[]
   subscription  Subscription?
   payments      Payment[]
+  referrals     Referral[]  @relation("ReferralOwner")
+  referralCode  String?     @unique
 
   @@index([discordId])
 }
@@ -99,4 +101,17 @@ model RateLimit {
   createdAt DateTime @default(now())
 
   @@unique([userId, window])
+}
+
+model Referral {
+  id         String   @id @default(cuid())
+  code       String   @unique
+  ownerId    String
+  owner      User     @relation("ReferralOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  usedBy     String?
+  usedAt     DateTime?
+  createdAt  DateTime @default(now())
+
+  @@index([code])
+  @@index([ownerId])
 }
