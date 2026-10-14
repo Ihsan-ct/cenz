@@ -8,8 +8,11 @@ export async function GET() {
     await prisma.$queryRaw`select 1`;
     return Response.json({ ok: true, ms: Date.now() - t });
   } catch (e: any) {
+    const msg = String(e?.message ?? "")
+      .replace(/postgres(ql)?:\/\/[^\s@]*@/g, "postgresql://***@")
+      .split("\n").map((l: string) => l.trim()).filter(Boolean).slice(-3);
     return Response.json(
-      { ok: false, ms: Date.now() - t, code: e?.errorCode ?? e?.code, name: e?.name },
+      { ok: false, ms: Date.now() - t, code: e?.errorCode ?? e?.code, msg },
       { status: 500 }
     );
   }
