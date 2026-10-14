@@ -25,9 +25,15 @@ export async function GET(req: Request) {
     data: { status: "FAILED", errorMessage: "Pemrosesan terhenti. Coba lagi." },
   });
 
+  // 2b. job yatim di QUEUED (tidak pernah diambil worker)
+  const orphan = await prisma.job.updateMany({
+    where: { status: "QUEUED", createdAt: { lt: new Date(Date.now() - 30 * 60 * 1000) } },
+    data: { status: "FAILED", errorMessage: "Antrean tidak diproses. Coba lagi." },
+  });
+
   // 3. catatan rate limit > 48 jam
   const cutoff = new Date(Date.now() - 48 * 3600 * 1000).toISOString().slice(0, 13);
   const oldRl = await prisma.rateLimit.deleteMany({ where: { window: { lt: cutoff } } });
 
-  return Response.json({ files: names.length, stuck: stuck.count, rateLimit: oldRl.count });
+  return Response.json({ files: names.length, stuck: stuck.count, orphan: orphan.count, rateLimit: oldRl.count });
 }
