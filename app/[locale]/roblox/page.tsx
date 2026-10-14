@@ -6,7 +6,7 @@ import RobloxForm from '@/components/convert/RobloxForm';
 export default async function RobloxPage({ params: { locale } }: { params: { locale: string } }) {
   const session = await auth();
   if (!session?.user) redirect(`/${locale}/login`);
-  const user = await prisma.user.findFirst({ where: { email: session.user.email || undefined }, include: { robloxAccount: true } });
+  const user = await prisma.user.findUnique({ where: { id: (session.user as { id?: string }).id ?? "" }, include: { robloxAccount: true } });
   const isID = locale === 'id';
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">

@@ -5,8 +5,8 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
-  const user = await prisma.user.findFirst({
-    where: { email: session.user.email || undefined },
+  const user = await prisma.user.findUnique({
+    where: { id: (session.user as { id?: string }).id ?? "" },
     include: { subscription: true, robloxAccount: { select: { robloxUserId: true, robloxUsername: true, verified: true } } },
   });
   if (!user) return NextResponse.json({ error: 'NOT_FOUND' }, { status: 404 });

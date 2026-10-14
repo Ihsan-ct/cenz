@@ -21,7 +21,7 @@ export default function ConvertForm({ locale = 'id' }: { locale?: string }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed');
-      router.push(`/id/history`);
+      router.push(`/${locale}/history`);
     } catch (err: any) { setError(err.message); }
     finally { setLoading(false); }
   }

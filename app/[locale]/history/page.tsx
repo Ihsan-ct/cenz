@@ -5,8 +5,8 @@ import { redirect } from 'next/navigation';
 export default async function HistoryPage({ params: { locale } }: { params: { locale: string } }) {
   const session = await auth();
   if (!session?.user) redirect(`/${locale}/login`);
-  const user = await prisma.user.findFirst({ where: { email: session.user.email || undefined } });
-  const jobs = user ? await prisma.job.findMany({ where: { userId: user.id }, orderBy: { createdAt: 'desc' }, take: 50 }) : [];
+  const uid = (session.user as { id?: string }).id;
+  const jobs = uid ? await prisma.job.findMany({ where: { userId: uid }, orderBy: { createdAt: 'desc' }, take: 50 }) : [];
   const isID = locale === 'id';
 
   return (

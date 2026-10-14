@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: 'UNAUTHORIZED' }, { status: 401 });
-  const user = await prisma.user.findFirst({ where: { email: session.user.email || undefined } });
+  const user = await prisma.user.findUnique({ where: { id: (session.user as { id?: string }).id ?? "" } });
   if (!user) return NextResponse.json({ error: 'NOT_FOUND' }, { status: 404 });
 
   const form = await req.formData().catch(() => null);
