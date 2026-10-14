@@ -1,23 +1,30 @@
-import { Queue } from 'bullmq';
-import { redis } from './redis';
+import { Queue } from "bullmq";
 
-export const convertQueue = new Queue('convert', { connection: redis as any });
+function redisOptions() {
+  const u = new URL((process.env.REDIS_URL ?? "").trim());
+  return {
+    host: u.hostname,
+    port: Number(u.port || 6379),
+    username: decodeURIComponent(u.username) || undefined,
+    password: decodeURIComponent(u.password) || undefined,
+    tls: u.protocol === "rediss:" ? {} : undefined,
+    maxRetriesPerRequest: null as null,
+  };
+}
 
-export type ConvertJobData = {
-  jobId: string;
-  userId: string;
-  sourceUrl?: string;
-  r2Key?: string;
-  speed: number;
-  amplify: number;
-  maxDuration: number;
-};
+let q: Queue | null = null;
 
-export async function enqueueConvert(data: ConvertJobData) {
-  await convertQueue.add('process', data, {
-    attempts: 2,
-    backoff: { type: 'exponential', delay: 5000 },
-    removeOnComplete: 100,
-    removeOnFail: 50,
-  });
+// Lazy: tidak konek ke Redis saat build.
+export function getQueue() {
+  if (!q) {
+    q = new Queue("convert", {
+      connection: redisOptions(),
+      defaultJobOptions: {
+        attempts: 1,
+        removeOnComplete: true,
+        removeOnFail: { count: 50 },
+      },
+    });
+  }
+  return q;
 }
