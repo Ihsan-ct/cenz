@@ -9,8 +9,13 @@ export async function uploadAudioToRoblox(
   audioBuffer: Buffer,
   fileName: string
 ): Promise<RobloxUploadResult> {
+  const ab = audioBuffer.buffer.slice(
+    audioBuffer.byteOffset,
+    audioBuffer.byteOffset + audioBuffer.byteLength
+  ) as ArrayBuffer;
+
   const form = new FormData();
-  form.append('file', new Blob([audioBuffer], { type: 'audio/mpeg' }), fileName);
+  form.append('file', new Blob([ab], { type: 'audio/mpeg' }), fileName);
   form.append('assetType', 'Audio');
   form.append('displayName', fileName.replace(/\.mp3$/i, ''));
   form.append('description', 'Uploaded via cenz-clone');
@@ -25,8 +30,11 @@ export async function uploadAudioToRoblox(
     const txt = await res.text();
     throw new Error(`Roblox upload failed: ${res.status} ${txt}`);
   }
-  const data = await res.json();
-  return { assetId: data.path?.split('/').pop() || data.assetId, moderationState: data.moderationState };
+  const data: any = await res.json();
+  return {
+    assetId: data.path?.split('/').pop() || data.assetId,
+    moderationState: data.moderationState,
+  };
 }
 
 export async function getRobloxUser(apiKey: string, userId: string) {
