@@ -32,14 +32,6 @@ export async function POST(req: Request) {
   const isPaid = !!user.subscription?.active &&
     (!user.subscription.expiresAt || user.subscription.expiresAt > new Date());
 
-  const rl = await checkRateLimit(user.id, isPaid ? 999 : 2);
-  if (!rl.ok) {
-    return NextResponse.json(
-      { error: 'RATE_LIMIT', remaining: rl.remaining, resetIn: rl.resetIn },
-      { status: 429 }
-    );
-  }
-
   const body = await req.json().catch(() => null);
   const parsed = schema.safeParse(body);
   if (!parsed.success) {
@@ -52,6 +44,14 @@ export async function POST(req: Request) {
     where: { userId: user.id, status: { in: ['QUEUED', 'PROCESSING'] } },
   });
   if (active >= MAX_ACTIVE) return NextResponse.json({ error: 'TOO_MANY_ACTIVE' }, { status: 429 });
+
+  const rl = await checkRateLimit(user.id, isPaid ? 999 : 2);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'RATE_LIMIT', remaining: rl.remaining, resetIn: rl.resetIn },
+      { status: 429 }
+    );
+  }
 
   const maxDuration = isPaid ? MAX_DURATION.paid : MAX_DURATION.free;
 
