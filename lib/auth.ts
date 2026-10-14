@@ -9,13 +9,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   debug: process.env.AUTH_DEBUG === "1",
   logger: {
     error(error) {
+      const c = (error as any).cause;
+      const inner = c?.err ?? c;
       console.error(
         "[auth][error]",
         error.name,
-        error.message,
-        "input=",
-        JSON.stringify((error as any).input ?? (error as any).cause?.input ?? null),
-        "\nstack=", error.stack
+        "| inner:", inner?.name, inner?.message, inner?.code ?? "",
+        "| provider:", c?.provider ?? "",
+        "\ninnerstack=", inner?.stack ?? "(none)"
       );
     },
     warn(code) {
@@ -53,11 +54,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, account, profile }) {
       const p = profile as any;
       if (account?.provider === "discord" && p?.id) {
-        const u = await prisma.user.findUnique({
-          where: { discordId: String(p.id) },
-          select: { id: true },
-        });
-        if (u) token.uid = u.id;
+        try {
+          const u = await prisma.user.findUnique({
+            where: { discordId: String(p.id) },
+            select: { id: true },
+          });
+          if (u) token.uid = u.id;
+        } catch (e) {
+          console.error("[auth] jwt findUnique failed:", e);
+        }
       }
       return token;
     },
