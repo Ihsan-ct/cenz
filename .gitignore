@@ -1,6 +1,38 @@
+# deps
 node_modules
+.pnp
+.pnp.js
+
+# next
 .next
+out
+build
+
+# env
 .env
 .env.local
+.env.production
+.env*.local
+.env.bak
+
+# vercel
 .vercel
+
+# logs
 *.log
+npm-debug.log*
+pnpm-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
+
+# prisma (cuma schema yang di-track)
+prisma/*.db
+prisma/*.db-journal
+prisma/migrations/**/migration_lock.toml
+
+# misc
+.idea
+.vscode
+*.swp
